@@ -101,8 +101,26 @@ function draw() {
 
 // draw white circle at mouse position 
     if (cueInPocket ||(chooseCuePos && homePage == false)) {
-        constrainedMouseX = constrain(mouseX, width / 2 - TABLE_LENGTH * 6 / 11 - TABLE_LENGTH/6,width / 2 - TABLE_LENGTH * 6 / 11);
-        constrainedMouseY = constrain(mouseY, height / 2 - TABLE_LENGTH* 1/6, height / 2 + TABLE_LENGTH * 1/6);
+        var centerX = width / 2 - TABLE_LENGTH * 6 / 11;
+        var centerY = height / 2;
+        var radius = TABLE_LENGTH / 6;
+
+        var x = mouseX;
+        if (x > centerX) {
+            x = centerX;
+        }
+        var y = mouseY;
+        var dx = x - centerX;
+        var dy = y - centerY;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > radius) {
+            var scale = radius / distance;
+            dx *= scale;
+            dy *= scale;
+        }
+        constrainedMouseX = centerX + dx;
+        constrainedMouseY = centerY + dy;
+
         noStroke();
         fill(255);
         ellipse(constrainedMouseX, constrainedMouseY, ballDiameter * 2);
@@ -529,7 +547,7 @@ function drawTable() {
     strokeWeight(1);
     line(width/2 - TABLE_LENGTH* 6/11, height/2 - TABLE_LENGTH/2, width/2 - TABLE_LENGTH* 6/11, height/2 + TABLE_LENGTH/2);
     //Draw semicircle on the left side of table
-    arc(width/2 - TABLE_LENGTH * 6.1/11, height/2, TABLE_LENGTH/3, TABLE_LENGTH/3, PI/2, 3*PI/2);
+    arc(width/2 - TABLE_LENGTH * 6/11, height/2, TABLE_LENGTH/3, TABLE_LENGTH/3, PI/2, 3*PI/2);
 
 }
 //////////////GAME FUNCTIONS /////////////////////
